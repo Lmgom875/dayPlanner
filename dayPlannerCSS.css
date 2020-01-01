@@ -18,20 +18,28 @@
     text-align: center;
 }
 
-#MainHours{
+#mainHours{
     margin: 0;
+    /*border-style: solid;
+    border-width: 2px; 
+    border-left: none;
+    border-right: none ;
+    border-top: none;*/
 }
 
 #hoursNum{
+    padding: 0;
     border-style: solid;
+    border-color: #c1c1c1;
     border-width: 2px; 
+    border-right: none;
     border-left: none;
     border-bottom: none;
 }
 
 #hour{
     margin: 0;
-    padding: 8px 0;
+    padding: 8px 25px;
 }
 
 #hoursText{
@@ -39,6 +47,11 @@
     padding: 0;
     padding-left: 10px;
     align-items: center;
+    border-style: solid;
+    border-color: #f1f1f1;
+    border-width: 2px; 
+    border-right: none ;
+    border-bottom: none;
 }
 
 #inputEvent{
@@ -56,8 +69,14 @@
 #btnSave{
     width: 92px;
     height: 42px;
+    border-style: solid;
+    border-width: 2px; 
+    border-color:#f1f1f1;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
+    border-left: none;
+    border-right: none ;
+    border-bottom: none;
 }
