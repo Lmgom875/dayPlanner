@@ -90,20 +90,9 @@ $(document).ready(function(){
         for(i = 0; i < generalInfo.length; i++){
             var displayNow = ($("#inputEvent"+generalInfo[i].display).val());
             var notesNow = generalInfo[i].notes;
-            if(displayNow == ""){
                 generalInfo[i].notes = displayNow;
                 console.log("grabo vacio");
-            }
-            else if (displayNow != ""){
-                if(displayNow != notesNow){
-                    generalInfo[i].notes = notesNow + displayNow;
-                    console.log("sumo el texto");
-                }
-                else {
-                    generalInfo[i].notes = displayNow;
-                    console.log("grabo texto nuevo");
-                }
-            }
+
         }
         localStorage.setItem("generalInfo", JSON.stringify(generalInfo));
     }
