@@ -4,86 +4,127 @@ $(document).ready(function(){
     /* Variables*/
     /* -------------------------- */
 
-    var hourDis = [
-        "9AM",
-        "10AM",
-        "11AM",
-        "12PM",
-        "1PM",
-        "2PM",
-        "3PM",
-        "4PM",
-        "5PM"
+    //object for all info and for loops
+    var generalInfo = [
+        { display : "9AM",
+            notes : ""},
+        { display : "10AM",
+            notes : ""},
+        { display : "11AM",
+            notes : ""},
+        { display : "12PM",
+            notes : ""},
+        { display : "1PM",
+            notes : ""}, 
+        { display : "2PM",
+            notes : ""}, 
+        { display : "3PM",
+            notes : ""},
+        { display : "4PM",
+            notes : ""},
+        { display : "5AM",
+            notes : ""},
     ]
+
+    //var for moments.js
     var timeHours = moment().format('hA');
     var timeNow = moment(timeHours,'hA');
-    var timeDisplay = moment(hourDis[3],'hA');
     var timeSame = "";
     var timeBefore = "";
     var timeAfter = "";
-
-
-
-    //console.log(hour);
 
     /* -------------------------- */
     /* Loading Events */
     /* -------------------------- */
 
-    //$('#mainHead1').children().last().html("<h6>" + time + "</h6>");
     hourUpdate();
     setInterval(hourUpdate, 1000);
     createHoursDiv();
     colorVerification();
+    displayNotes();
     
 
     /* -------------------------- */
     /* Function*/
     /* -------------------------- */
 
+    //function to create div
     function createHoursDiv(){
-        for(i = 0; i < hourDis.length; i++){
-        $('#container').append("<div class= 'row mainHours d-flex justify-content-between' id='mainHours'></div>");
-        $('#container').children().last().append('<div class= "col-1 hoursNum" id="hoursNum"><p id="hour">'+ hourDis[i] + '</p>');
-        $('#container').children().last().append("<div class= 'col-10 hoursText' id='hoursText'><input type='text' class='inputEvent' id='inputEvent'></div>");
+        for(i = 0; i < generalInfo.length; i++){
+        $('#container').append("<div class= 'row mainHours d-flex justify-content-between' id='mainHours" + generalInfo[i].display + "'></div>");
+        $('#container').children().last().append('<div class= "col-1 hoursNum" id="hoursNum"><p id="hour">'+ generalInfo[i].display + '</p>');
+        $('#container').children().last().append("<div class= 'col-10 hoursText' id='hoursText"+generalInfo[i].display+"'><input type='text' class='inputEvent' id='inputEvent"+generalInfo[i].display+"'></div>");
         $('#container').children().last().append("<div class= 'col-1 hoursSaveBtn' id='hoursSaveBtn'><button class='btn btn-primary' id='btnSave'>Save</button></div>");
         }
     }
-
+    //function to update the hours
     function hourUpdate(){
         var timeReadable = moment().format('MMMM Do YYYY, h:mm:ss a');
         $('#mainHead1').children().last().html("<h6>" + timeReadable + "</h6>");
         
     }
-
+    //function to verificate colors
     function colorVerification(){
-        for(i = 0; i < hourDis.length; i++){
-            var timeDisplay = moment(hourDis[i],'hA');
+        for(i = 0; i < generalInfo.length; i++){
+            var timeDisplay = moment(generalInfo[i].display,'hA');
             timeSame = (moment(timeNow).isSame(timeDisplay));
             timeAfter = (moment(timeNow).isAfter(timeDisplay));
             timeBefore = (moment(timeNow).isBefore(timeDisplay));
             if (timeSame == true) {
-                console.log("presente");
+                $("#hoursText"+generalInfo[i].display).css({"background-color" : "red"});
+                $("#inputEvent"+generalInfo[i].display).css({"background-color" : "red"});
+                //console.log($("#mainHours"+hourDis[i]));
             }if (timeBefore == true) {
-                console.log("futuro");
+                $("#hoursText"+generalInfo[i].display).css({"background-color" : "lightgreen"});
+                $("#inputEvent"+generalInfo[i].display).css({"background-color" : "lightgreen"});
+                //console.log("future");
             }if (timeAfter == true) {
-                console.log("pasado")
+                $("#hoursText"+generalInfo[i].display).css({"background-color" : "lightgray"});
+                $("#inputEvent"+generalInfo[i].display).css({"background-color" : "lightgray"});
+                //console.log("past")
             }
-
         }
-
     }
-    console.log(timeNow);
-    //console.log(timeBefore);
-    //console.log("hola afuera");
+    // function to save in local store
+    function saveLocalStore(){
+        for(i = 0; i < generalInfo.length; i++){
+            var displayNow = ($("#inputEvent"+generalInfo[i].display).val());
+            var notesNow = generalInfo[i].notes;
+            if(displayNow == ""){
+                generalInfo[i].notes = displayNow;
+                console.log("grabo vacio");
+            }
+            else if (displayNow != ""){
+                if(displayNow != notesNow){
+                    generalInfo[i].notes = notesNow + displayNow;
+                    console.log("sumo el texto");
+                }
+                else {
+                    generalInfo[i].notes = displayNow;
+                    console.log("grabo texto nuevo");
+                }
+            }
+        }
+        localStorage.setItem("generalInfo", JSON.stringify(generalInfo));
+    }
 
-
+    //function to display the contest in the textbox
+    function displayNotes (){
+        if (localStorage.getItem("generalInfo")){
+            generalInfo = JSON.parse(localStorage.getItem("generalInfo"));
+            for(i = 0; i < generalInfo.length; i++){
+                $("#inputEvent"+generalInfo[i].display).attr("value", generalInfo[i].notes);
+                console.log($("#inputEvent"+generalInfo[i].display));
+            }
+        }
+    }
 
     /* -------------------------- */
     /* Events*/
     /* -------------------------- */
 
-
-
-
+    //event for click save button 
+    $("#container").on('click', '.hoursSaveBtn', function(){
+        saveLocalStore();
+    })
 });
